@@ -6,6 +6,8 @@ class Trainer(models.Model):
     name = models.CharField(max_length=25)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    def __str__(self):
+        return self.name
 
 class Pokemon(models.Model):
     trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE)
@@ -21,3 +23,5 @@ class Pokemon(models.Model):
             )
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name + ' level:' +str(self.level) 
