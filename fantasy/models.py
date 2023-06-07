@@ -8,6 +8,11 @@ class Trainer(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
     def __str__(self):
         return self.name
+    def can_field_team(self):
+        if len(self.pokemon_set.all())>=3:
+            return True
+        else:
+            return False
 
 class Pokemon(models.Model):
     trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE)
