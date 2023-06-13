@@ -5,8 +5,9 @@ from multiselectfield import MultiSelectField
 
 TRADE_STATUSES = ((1, 'pending'),
             (2, 'invalid'),
-            (3, 'rejected'),
-            (4, 'fulfilled'))
+            (3, 'valid'),
+            (4, 'rejected'),
+            (5, 'fulfilled'))
 # Create your models here.
 class Trainer(models.Model):
     name = models.CharField(max_length=25)
