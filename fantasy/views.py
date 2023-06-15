@@ -17,15 +17,21 @@ def team_details(request, team_id):
         return HttpResponse(status = 404)
     serializer = TrainerSerializer(team)
     return JsonResponse(serializer.data)
-   # pokemon_to_display = team.pokemon_set.all()
-   # data = serializers.serialize('json',list(pokemon_to_display))
-   # return HttpResponse(data)
 
 class SubmitTrade(APIView):
+    def is_trade_valid(self,trade_data):
+        trainer_1 = Trainer.objects.get(id = trade_data["trainer_1"].id)
+        trainer_2 = Trainer.objects.get(id = trade_data["trainer_2"].id)
+        if not trainer_1.pokemon_set.all().filter(id=trade_data["pokemon_1"].id):
+            return False
+        if not trainer_2.pokemon_set.all().filter(id=trade_data["pokemon_2"].id):
+            return False
+        return True
     def post(self, request, format=None):
         serializer = TradeSerializer(data = request.data)
         if serializer.is_valid():
-            serializer.validated_data['status'] = 'pending'
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            if self.is_trade_valid(serializer.validated_data):#validated data is ordereddict as opposed to dict
+                serializer.validated_data['status'] = 'pending'
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
