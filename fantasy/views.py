@@ -20,11 +20,15 @@ def team_details(request, team_id):
 
 class SubmitTrade(APIView):
     def is_trade_valid(self,trade_data):
-        trainer_1 = Trainer.objects.get(id = trade_data["trainer_1"].id)
-        trainer_2 = Trainer.objects.get(id = trade_data["trainer_2"].id)
-        if not trainer_1.pokemon_set.all().filter(id=trade_data["pokemon_1"].id):
+       # trainer_1 = Trainer.objects.get(id = trade_data["trainer_1"].id)
+       # trainer_2 = Trainer.objects.get(id = trade_data["trainer_2"].id)
+        trainer_1 = trade_data["trainer_1"]
+        trainer_2 = trade_data["trainer_2"]
+        pokemon_1 = trade_data["pokemon_1"]
+        pokemon_2 = trade_data["pokemon_2"]
+        if pokemon_1 not in trainer_1.pokemon_set.all():
             return False
-        if not trainer_2.pokemon_set.all().filter(id=trade_data["pokemon_2"].id):
+        if pokemon_2 not in trainer_2.pokemon_set.all():
             return False
         return True
     def post(self, request, format=None):
