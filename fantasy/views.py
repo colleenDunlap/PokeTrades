@@ -18,23 +18,24 @@ def team_details(request, team_id):
     serializer = TrainerSerializer(team)
     return JsonResponse(serializer.data)
 
+def is_trade_valid(trade_data):
+    trainer_1 = Trainer.objects.get(id = trade_data["trainer_1"].id)
+    trainer_2 = Trainer.objects.get(id = trade_data["trainer_2"].id)
+    trainer_1 = trade_data["trainer_1"]
+    trainer_2 = trade_data["trainer_2"]
+    pokemon_1 = trade_data["pokemon_1"]
+    pokemon_2 = trade_data["pokemon_2"]
+    if pokemon_1 not in trainer_1.pokemon_set.all():
+        return False
+    if pokemon_2 not in trainer_2.pokemon_set.all():
+        return False
+    return True
+
 class SubmitTrade(APIView):
-    def is_trade_valid(self,trade_data):
-       # trainer_1 = Trainer.objects.get(id = trade_data["trainer_1"].id)
-       # trainer_2 = Trainer.objects.get(id = trade_data["trainer_2"].id)
-        trainer_1 = trade_data["trainer_1"]
-        trainer_2 = trade_data["trainer_2"]
-        pokemon_1 = trade_data["pokemon_1"]
-        pokemon_2 = trade_data["pokemon_2"]
-        if pokemon_1 not in trainer_1.pokemon_set.all():
-            return False
-        if pokemon_2 not in trainer_2.pokemon_set.all():
-            return False
-        return True
     def post(self, request, format=None):
         serializer = TradeSerializer(data = request.data)
         if serializer.is_valid():
-            if self.is_trade_valid(serializer.validated_data):#validated data is ordereddict as opposed to dict
+            if is_trade_valid(serializer.validated_data):#validated data is ordereddict as opposed to dict
                 serializer.validated_data['status'] = 'pending'
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
