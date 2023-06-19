@@ -39,4 +39,5 @@ class SubmitTrade(APIView):
                 serializer.validated_data['status'] = 'pending'
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response("invalid trade", status = status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
