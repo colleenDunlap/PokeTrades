@@ -33,6 +33,9 @@ def is_trade_valid(trade_data):
         return False
     if pokemon_2 not in trainer_2.pokemon_set.all():
         return False
+    level_diff = pokemon_1.level-pokemon_2.level
+    if level_diff<-20 or level_diff>20:
+        return False
     return True
 
 class SubmitTrade(APIView):

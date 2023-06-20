@@ -23,6 +23,10 @@ class TradeTests(TestCase):
         self.assertIs(is_trade_valid(trade_data), True)
         trade_data = {'trainer_1':trainer_1, 'trainer_2':trainer_2,'pokemon_1':pokemon_1, 'pokemon_2':pokemon_1}
         self.assertIs(is_trade_valid(trade_data), False)
+        pokemon_1.level=30
+        
+        trade_data = {'trainer_1':trainer_1, 'trainer_2':trainer_2,'pokemon_1':pokemon_1, 'pokemon_2':pokemon_2}
+        self.assertIs(is_trade_valid(trade_data), False)
 class TrainerModelTests(TestCase):
     def test_can_field_team(self):
         trainer = Trainer(name = "test trainer")
