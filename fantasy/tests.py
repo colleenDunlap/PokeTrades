@@ -13,6 +13,13 @@ class TradeTests(TestCase):
         pokemon_1 = trainer_1.pokemon_set.all()[0]
         pokemon_2 = trainer_2.pokemon_set.all()[0]
         trade_data = {'trainer_1':trainer_1, 'trainer_2':trainer_2,'pokemon_1':pokemon_1, 'pokemon_2':pokemon_2}
+        self.assertIs(is_trade_valid(trade_data), False)#trainers cannot field teams with only one pokemon each
+        
+        trainer_1.pokemon_set.create(name = "testpoke3",species_name = "testbulba", species_id = 1)
+        trainer_1.pokemon_set.create(name = "testpoke4",species_name = "testbulba", species_id = 1)
+        trainer_2.pokemon_set.create(name = "testpoke5",species_name = "testbulba", species_id = 1)
+        self.assertIs(is_trade_valid(trade_data), False)#only one trainer can field team
+        trainer_2.pokemon_set.create(name = "testpoke2",species_name = "testbulba", species_id = 1)
         self.assertIs(is_trade_valid(trade_data), True)
         trade_data = {'trainer_1':trainer_1, 'trainer_2':trainer_2,'pokemon_1':pokemon_1, 'pokemon_2':pokemon_1}
         self.assertIs(is_trade_valid(trade_data), False)

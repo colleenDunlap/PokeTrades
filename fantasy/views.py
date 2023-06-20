@@ -23,6 +23,10 @@ def is_trade_valid(trade_data):
     trainer_2 = Trainer.objects.get(id = trade_data["trainer_2"].id)
     trainer_1 = trade_data["trainer_1"]
     trainer_2 = trade_data["trainer_2"]
+    if not trainer_1.can_field_team():
+        return False
+    if not trainer_2.can_field_team():
+        return False
     pokemon_1 = trade_data["pokemon_1"]
     pokemon_2 = trade_data["pokemon_2"]
     if pokemon_1 not in trainer_1.pokemon_set.all():
